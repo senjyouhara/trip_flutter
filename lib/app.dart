@@ -43,10 +43,10 @@ class _MyAppState extends State<MyApp>{
             // theme: ThemeData(
             //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             // ),
-            initialRoute: '/login',
+            initialRoute: '/',
             unknownRoute: GetPage(name: '/notfound', page: () => NotFoundPage()),
             getPages: [
-              GetPage(name: '/', page: () => HomePage()),
+              GetPage(name: '/', page: () => IndexPage()),
               GetPage(name: '/login', page: () => LoginPage()),
               GetPage(name: '/register', page: () => RegisterPage()),
             ],
