@@ -1,0 +1,64 @@
+[
+  {
+    "path": "/api/basic/data",
+    "method": "POST",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": {
+        "test": "test"
+      }
+    }
+  },
+  {
+    "path": "/api/template/without-data-block",
+    "method": "POST",
+    "statusCode": 200,
+    "template": {
+      "size": 100000,
+      "content": {
+        "id": "test${index}",
+        "name": "name_${index}"
+      }
+    }
+  },
+  {
+    "path": "/api/template/with-data-block2",
+    "method": "POST",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": {
+        "id": "yong-xin",
+        "listA": "${template}"
+      }
+    },
+    "template": {
+      "size": 100,
+      "content": {
+        "id": "test${index}",
+        "name": "name_${index}"
+      }
+    }
+  },
+  {
+    "path": "/api/expression/req-data",
+    "method": "POST",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": {
+        "id": "yong-xin",
+        "desc": "Hi ${req['data']['name']}, I am ${req['data']['name2'] + '_varSuffix'}",
+        "desc2": "test header, ${req['headers']['content-type']}",
+        "desc3": "test queryParameter, ${req['queryParameters']['name3']}",
+        "desc4": "test baseUrl, ${req['baseUrl']}",
+        "desc5": "test method, ${req['method']}",
+        "desc6": "test path, ${req['path']}"
+      }
+    }
+  }
+]

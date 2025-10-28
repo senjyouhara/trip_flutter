@@ -1,5 +1,6 @@
 import 'package:trip_flutter/generated/json/base/json_convert_content.dart';
 import 'package:trip_flutter/utils/request/base_model_entity.dart';
+import 'package:trip_flutter/generated/json/base/json_convert_content.dart';
 
 BaseModelEntity $BaseModelEntityFromJson<T>(Map<String, dynamic> json) {
   final BaseModelEntity baseModelEntity = BaseModelEntity();

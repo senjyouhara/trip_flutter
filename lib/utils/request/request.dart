@@ -5,6 +5,7 @@ import 'dart:io' as io;
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:dio_mock_interceptor/dio_mock_interceptor.dart';
 import 'package:trip_flutter/utils/request/cookie_interceptor.dart';
 import 'package:trip_flutter/utils/request/request_interceptor.dart';
 import 'package:trip_flutter/utils/request/resp_interceptor.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'base_model_entity.dart';
 
 class Request {
-  static String _baseUrl = "https://www.wanandroid.com";
+  static String _baseUrl = "";
 
   // 单位秒
   static int _timeout = 300;
@@ -143,6 +144,7 @@ class Request {
     dio.interceptors.add(MyRequestInterceptor());
     dio.interceptors.add(MyResponseInterceptor());
     // initAdapter(dio);
+    dio.interceptors.add(MockInterceptor());
 
     Response response;
 
@@ -206,8 +208,12 @@ class Request {
       }
     }
 
-    if(T == String || T == int || T == double || T == bool || T == Uint8List || T == List || (T.toString().startsWith('List<') && T.toString().endsWith('>')) ){
-      model.data = response.data;
+    final typeString = T.toString();
+    final isBasicType = T == String || T == int || T == double || T == bool || T == Uint8List;
+    final isListType = T == List || typeString.startsWith('List<');
+
+    if(isBasicType || isListType) {
+      model.data = _convertResponseData<T>(response.data);
     } else {
       model = BaseModelEntity<T>.fromJson(response.data);
     }
@@ -245,5 +251,49 @@ class Request {
       io.HttpClient httpClient = io.HttpClient(context: securityContext);
       return httpClient;
     };
+  }
+
+  static dynamic _convertResponseData<T>(dynamic responseData) {
+    final typeString = T.toString();
+
+    // 首先解析完整的响应 JSON
+    dynamic parsedData;
+    if (responseData is String) {
+      try {
+        parsedData = json.decode(responseData);
+      } catch (e) {
+        print('JSON decode error: $e');
+        return responseData;
+      }
+    } else {
+      parsedData = responseData;
+    }
+
+    // 检查是否是 BaseModelEntity 结构
+    if (parsedData is Map<String, dynamic>) {
+      // 提取 data 字段
+      final responseDataField = parsedData['data'];
+
+      if (typeString.startsWith('List<')) {
+        if (responseDataField is List) {
+          // 提取泛型类型
+          final genericType = typeString.substring(5, typeString.length - 1);
+          if (genericType == 'String') {
+            return responseDataField.cast<String>();
+          } else if (genericType == 'int') {
+            return responseDataField.cast<int>();
+          } else if (genericType == 'double') {
+            return responseDataField.cast<double>();
+          } else if (genericType == 'bool') {
+            return responseDataField.cast<bool>();
+          }
+        }
+      }
+
+      // 如果不是列表类型，返回整个 data 字段
+      return responseDataField;
+    }
+
+    return responseData;
   }
 }

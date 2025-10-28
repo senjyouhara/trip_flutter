@@ -6,7 +6,7 @@ import 'package:trip_flutter/pages/home/my_page.dart';
 import 'package:trip_flutter/pages/home/search_page.dart';
 import 'package:trip_flutter/pages/home/travel_page.dart';
 
-import '../../widget/keep_alive_wrapper.dart';
+import '../../components/keep_alive_wrapper.dart';
 
 class IndexController extends GetxController {
   var currentIndex = 0.obs;

@@ -1,0 +1,72 @@
+[
+  {
+    "path": "/api/home/banner",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": [
+        "https://www.devio.org/io/flutter_app/img/banner/100h10000000q7ght9352.jpg",
+        "https://o.devio.org/images/fa/cat-4098058__340.webp",
+        "https://o.devio.org/images/fa/photo-1601513041797-a79a526a521e.webp",
+        "https://o.devio.org/images/other/as-cover.png",
+        "https://o.devio.org/images/other/rn-cover2.png"
+      ]
+    }
+  },
+  {
+    "path": "/api/home/navMenus",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": [{
+        "label": "菜单1",
+        "value": "1",
+        "icon": ""
+
+      }]
+    }
+  },
+  {
+    "path": "/api/home/mainMenus",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "errorMsg": "",
+      "errorCode": 200,
+      "data": [{
+        "mainMenu": {
+          "label": "酒店",
+          "value": "1",
+          "icon": "assets/icons/hotel.png"
+        },
+        "subMenus": [
+
+        ]
+      },{
+        "mainMenu": {
+          "label": "机票",
+          "value": "2",
+          "icon": "assets/icons/fight.png"
+        },
+        "subMenus": [
+
+        ]
+      },{
+        "mainMenu": {
+          "label": "火车票",
+          "value": "3",
+          "icon": "assets/icons/train_ticket.png"
+        },
+        "subMenus": [
+
+        ]
+      }]
+    }
+  }
+]
+
+

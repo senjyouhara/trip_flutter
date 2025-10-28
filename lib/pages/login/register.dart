@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../extensions/image_extension.dart';
 
-import '../../widget/loading.dart';
+import '../../components/loading.dart';
 import 'input_widget.dart';
 import 'register_controller.dart';
 

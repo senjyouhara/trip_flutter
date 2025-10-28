@@ -8,13 +8,6 @@ import 'package:get/get.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
-  final bannerList = [
-    "https://www.devio.org/io/flutter_app/img/banner/100h10000000q7ght9352.jpg",
-    "https://o.devio.org/images/fa/cat-4098058__340.webp",
-    "https://o.devio.org/images/fa/photo-1601513041797-a79a526a521e.webp",
-    "https://o.devio.org/images/other/as-cover.png",
-    "https://o.devio.org/images/other/rn-cover2.png",
-  ];
 
   final alphaScrollOffset = 100;
 
@@ -36,20 +29,20 @@ class HomePage extends GetView<HomeController> {
 
   get _swiper => Container(
     height: 150.h,
-    child: Swiper(
+    child: Obx(() => Swiper(
       outer: false,
       autoplayDelay: 5000,
-      itemCount: bannerList.length ?? 0,
+      itemCount: controller.bannerList.length ?? 0,
       autoplay: true,
       loop: true,
       indicatorLayout: PageIndicatorLayout.NONE,
       itemBuilder: (context, index) {
         return Container(
           width: double.infinity,
-          child: Image.network(bannerList[index] ?? "", fit: BoxFit.cover),
+          child: Image.network(controller.bannerList[index] ?? "", fit: BoxFit.cover),
         );
       },
-    ),
+    )),
   );
 
   get _listView => ListView(
