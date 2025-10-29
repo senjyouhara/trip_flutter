@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip_flutter/pages/home/home_page.dart';
-import 'package:trip_flutter/pages/home/my_page.dart';
-import 'package:trip_flutter/pages/home/search_page.dart';
-import 'package:trip_flutter/pages/home/travel_page.dart';
+import './home/home_page.dart';
+import './my/my_page.dart';
+import './search/search_page.dart';
+import './travel/travel_page.dart';
 
 import '../../components/keep_alive_wrapper.dart';
 

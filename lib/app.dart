@@ -6,7 +6,7 @@ import 'config.dart';
 import 'pages/login/index.dart';
 import 'pages/login/register.dart';
 import 'utils/permission_util.dart';
-import 'pages/home/index.dart';
+import 'pages/index/index.dart';
 import 'pages/notfound/index.dart';
 
 

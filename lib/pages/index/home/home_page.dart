@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:get/get.dart';
+import 'components/main_menus.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
-
   final alphaScrollOffset = 100;
 
   get _appbar => Obx(
@@ -29,26 +29,32 @@ class HomePage extends GetView<HomeController> {
 
   get _swiper => Container(
     height: 150.h,
-    child: Obx(() => Swiper(
-      outer: false,
-      autoplayDelay: 5000,
-      itemCount: controller.bannerList.length ?? 0,
-      autoplay: true,
-      loop: true,
-      indicatorLayout: PageIndicatorLayout.NONE,
-      itemBuilder: (context, index) {
-        return Container(
-          width: double.infinity,
-          child: Image.network(controller.bannerList[index] ?? "", fit: BoxFit.cover),
-        );
-      },
-    )),
+    child: Obx(
+      () => Swiper(
+        outer: false,
+        autoplayDelay: 5000,
+        itemCount: controller.bannerList.length ?? 0,
+        autoplay: true,
+        loop: true,
+        indicatorLayout: PageIndicatorLayout.NONE,
+        itemBuilder: (context, index) {
+          return Container(
+            width: double.infinity,
+            child: Image.network(
+              controller.bannerList[index] ?? "",
+              fit: BoxFit.cover,
+            ),
+          );
+        },
+      ),
+    ),
   );
 
   get _listView => ListView(
     children: [
       _swiper,
       const SizedBox(height: 800, child: ListTile(title: Text("hehehehehe"))),
+      Obx(()=> MainMenus(mainMenus: controller.mainMenuList)),
     ],
   );
 

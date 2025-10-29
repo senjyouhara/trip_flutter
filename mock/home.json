@@ -40,29 +40,62 @@
       "data": [{
         "mainMenu": {
           "label": "酒店",
-          "value": "1",
-          "icon": "assets/icons/hotel.png"
+          "value": "/hotel",
+          "icon": "assets/icons/hotel.png",
+          "colors": ["#FA5956", "#FB8650"]
         },
+        "subColor": "#fff5f1",
         "subMenus": [
-
+          {
+            "label": "民宿/客栈",
+            "value": "/hotel_inn",
+            "icon": "assets/icons/hotel_inn.png"
+          },
+          {
+            "label": "美食",
+            "value": "/food",
+            "icon": "assets/icons/food_v2.png"
+          }
         ]
       },{
         "mainMenu": {
           "label": "机票",
-          "value": "2",
-          "icon": "assets/icons/fight.png"
+          "value": "/fight",
+          "icon": "assets/icons/fight.png",
+          "colors": ["#3C83FA", "#50B2FA"]
         },
+        "subColor": "#eff9ff",
         "subMenus": [
-
+          {
+            "label": "航班助手",
+            "value": "/flight_schedule",
+            "icon": "assets/icons/flight_schedule.png"
+          },
+          {
+            "label": "接送机/包车",
+            "value": "/airport_transfer",
+            "icon": "assets/icons/airport_transfer.png"
+          }
         ]
       },{
         "mainMenu": {
           "label": "火车票",
-          "value": "3",
-          "icon": "assets/icons/train_ticket.png"
+          "value": "/train",
+          "icon": "assets/icons/train_ticket.png",
+          "colors": ["#66A4FF", "#5E80FF"]
         },
+        "subColor": "#f2f5ff",
         "subMenus": [
-
+          {
+            "label": "汽车/船票",
+            "value": "/bus_ticket",
+            "icon": "assets/icons/bus_ticket.png"
+          },
+          {
+            "label": "租车",
+            "value": "/car",
+            "icon": "assets/icons/car.png"
+          }
         ]
       }]
     }
