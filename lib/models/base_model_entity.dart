@@ -5,13 +5,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'base_model_entity.g.dart';
 
-// @JsonSerializable(
-//   genericArgumentFactories: true,
-//   fieldRename: FieldRename.snake,
-// )
+@JsonSerializable(
+  genericArgumentFactories: true,
+)
 class BaseModelEntity<T> {
-  String? errorMsg;
-  int? errorCode;
+  String? message;
+  int? code;
   T? data;
 
   BaseModelEntity();

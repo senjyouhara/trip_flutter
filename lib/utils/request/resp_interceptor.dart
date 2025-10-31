@@ -23,15 +23,15 @@ class MyResponseInterceptor extends  Interceptor {
         }
 
         var model = BaseModelEntity.fromJson(response.data, (json) => json as Map<String, dynamic>);
-        if(model.errorCode == 0){
+        if(model.code == 0){
           handler.next(Response(requestOptions: response.requestOptions, data: response.data));
         } else {
-          if(model.errorCode == -1001){
+          if(model.code == -1001){
             showToast("用户未登录");
             handler.reject(DioException(requestOptions: response.requestOptions, message: "未登录"));
           } else {
-            showToast(model.errorMsg?.isNotEmpty == true ? model.errorMsg! : "未知错误");
-            handler.reject(DioException(requestOptions: response.requestOptions, message: model.errorMsg?.isNotEmpty == true ? model.errorMsg! : "未知错误"));
+            showToast(model.message?.isNotEmpty == true ? model.message! : "未知错误");
+            handler.reject(DioException(requestOptions: response.requestOptions, message: model.message?.isNotEmpty == true ? model.message! : "未知错误"));
           }
         }
       } catch (err){

@@ -10,16 +10,16 @@ BaseModelEntity<T> _$BaseModelEntityFromJson<T>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
 ) => BaseModelEntity<T>()
-  ..errorMsg = json['error_msg'] as String?
-  ..errorCode = (json['error_code'] as num?)?.toInt()
-  ..data = fromJsonT(json['data']);
+  ..message = json['message'] as String?
+  ..code = (json['code'] as num?)?.toInt()
+  ..data = _$nullableGenericFromJson(json['data'], fromJsonT);
 
 Map<String, dynamic> _$BaseModelEntityToJson<T>(
   BaseModelEntity<T> instance,
   Object? Function(T value) toJsonT,
 ) => <String, dynamic>{
-  'error_msg': instance.errorMsg,
-  'error_code': instance.errorCode,
+  'message': instance.message,
+  'code': instance.code,
   'data': _$nullableGenericToJson(instance.data, toJsonT),
 };
 
