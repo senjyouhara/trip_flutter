@@ -22,7 +22,7 @@ class MyResponseInterceptor extends  Interceptor {
           return;
         }
 
-        var model = BaseModelEntity.fromJson(response.data);
+        var model = BaseModelEntity.fromJson(response.data, (json) => json as Map<String, dynamic>);
         if(model.errorCode == 0){
           handler.next(Response(requestOptions: response.requestOptions, data: response.data));
         } else {

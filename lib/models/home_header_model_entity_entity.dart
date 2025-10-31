@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'home_header_model_entity_entity.g.dart';
 
 @JsonSerializable()

@@ -8,7 +8,7 @@ part of 'base_model_entity.dart';
 
 BaseModelEntity<T> _$BaseModelEntityFromJson<T>(
   Map<String, dynamic> json,
-  T Function(Map<String, dynamic> json) fromJsonT,
+  T Function(Object? json) fromJsonT,
 ) => BaseModelEntity<T>()
   ..errorMsg = json['error_msg'] as String?
   ..errorCode = (json['error_code'] as num?)?.toInt()

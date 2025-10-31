@@ -14,7 +14,7 @@ import 'package:flutter/services.dart';
 import '../../models/base_model_entity.dart';
 
 // 定义转换器回调
-typedef TransformerCallback<T> = BaseModelEntity<T> Function(Map<String, dynamic> input);
+typedef TransformerCallback<T> = T Function(Object? json);
 
 class Request {
   static String _baseUrl = "";
@@ -31,7 +31,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) {
     return _request<T>(
       url,
@@ -41,7 +41,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
-      onTypeTransformerCb: onTypeTransformerCb,
+      fromJsonT: fromJsonT,
     );
   }
 
@@ -53,7 +53,7 @@ class Request {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) {
     return _request<T>(
       url,
@@ -64,7 +64,7 @@ class Request {
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
-      onTypeTransformerCb: onTypeTransformerCb,
+      fromJsonT: fromJsonT,
     );
   }
 
@@ -75,7 +75,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) {
     return _request<T>(
       url,
@@ -85,7 +85,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
-      onTypeTransformerCb: onTypeTransformerCb,
+      fromJsonT: fromJsonT,
     );
   }
 
@@ -95,7 +95,7 @@ class Request {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) {
     return _request<T>(
       url,
@@ -104,7 +104,7 @@ class Request {
       queryParameters: queryParameters,
       options: options,
       cancelToken: cancelToken,
-      onTypeTransformerCb: onTypeTransformerCb,
+      fromJsonT: fromJsonT,
     );
   }
 
@@ -117,7 +117,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) {
     return _request<T>(
       url,
@@ -129,7 +129,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
-      onTypeTransformerCb: onTypeTransformerCb,
+      fromJsonT: fromJsonT,
     );
   }
 
@@ -144,7 +144,7 @@ class Request {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
-    TransformerCallback<T>? onTypeTransformerCb,
+    required T Function(Object? json) fromJsonT,
   }) async {
     Dio dio = Dio();
     dio.options = BaseOptions(
@@ -228,19 +228,15 @@ class Request {
 
     Map<String, dynamic> jsonData = json.decode(response.data);
 
-    if (onTypeTransformerCb != null) {
-      return onTypeTransformerCb(jsonData);
-    }
-
-    final isBasicType = T == String || T == int || T == double || T == bool || T == Uint8List;
+    final isBasicType =
+        T == String || T == int || T == double || T == bool || T == Uint8List;
     final isBaseListType = _isBaseTypeList(jsonData['data']);
-    if(isBasicType) {
+    if (isBasicType) {
       model.data = jsonData['data'];
       return model;
     } else {
-      return BaseModelEntity<T>.fromJson(jsonData);
+      return BaseModelEntity<T>.fromJson(jsonData, fromJsonT);
     }
-
   }
 
   static void initAdapter(Dio dio) {
@@ -277,8 +273,7 @@ class Request {
     };
   }
 
-  static bool _isBaseTypeList<T>(dynamic data){
-
+  static bool _isBaseTypeList<T>(dynamic data) {
     // 快速检查：如果不是列表类型，直接返回 false
     if (data is! List) return false;
 
@@ -290,5 +285,4 @@ class Request {
         firstElement is double ||
         firstElement is bool;
   }
-
 }

@@ -12,19 +12,19 @@ class HomeController extends GetxController {
   var mainMenuList = <HomeMainMenusModelEntityEntity>[].obs;
 
   Future<void> testData() async {
-    var result = await Request.post<Map>('/api/basic/data');
+    var result = await Request.post('/api/basic/data', fromJsonT: (json) => null);
   }
 
   Future<void> getBannerData() async {
-    var result = await Request.get<List<String>>('/api/home/banner', onTypeTransformerCb: (jsonMap){
-      return BaseModelEntity<List<String>>.fromJson(jsonMap);
+    var result = await Request.get<List<String>>('/api/home/banner', fromJsonT: (json){
+      return (json as List).map((item) => item.toString()).toList();
     });
     bannerList.value = result.data ?? [];
   }
 
   Future<void> getMainMenusData() async {
-    var result = await Request.get<List<HomeMainMenusModelEntityEntity>>('/api/home/mainMenus', onTypeTransformerCb: (jsonMap){
-      return BaseModelEntity<List<HomeMainMenusModelEntityEntity>>.fromJson(jsonMap);
+    var result = await Request.get<List<HomeMainMenusModelEntityEntity>>('/api/home/mainMenus', fromJsonT: (json){
+      return (json as List).map((item) => HomeMainMenusModelEntityEntity.fromJson(item)).toList();
     });
     mainMenuList.value = result.data ?? [];
   }
