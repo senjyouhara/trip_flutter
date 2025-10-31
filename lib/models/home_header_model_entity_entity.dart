@@ -1,22 +1,29 @@
-import 'package:trip_flutter/generated/json/base/json_field.dart';
-import 'package:trip_flutter/generated/json/home_header_model_entity_entity.g.dart';
 import 'dart:convert';
-export 'package:trip_flutter/generated/json/home_header_model_entity_entity.g.dart';
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart';
+part 'home_header_model_entity_entity.g.dart';
 
 @JsonSerializable()
-class HomeHeaderModelEntityEntity {
-	String? label;
-	String? value;
-	String? icon;
+class HomeHeaderModelEntityEntity  {
+  String? label;
+      String? value;
+  String? icon;
 
-	HomeHeaderModelEntityEntity();
+  HomeHeaderModelEntityEntity({
+    this.label,
+    this.value,
+    this.icon,
+  });
 
-	factory HomeHeaderModelEntityEntity.fromJson(Map<String, dynamic> json) => $HomeHeaderModelEntityEntityFromJson(json);
+  factory HomeHeaderModelEntityEntity.fromJson(Map<String, Object?> json) =>
+      _$HomeHeaderModelEntityEntityFromJson(json);
+  Map<String, dynamic> toJson() => _$HomeHeaderModelEntityEntityToJson(this);
 
-	Map<String, dynamic> toJson() => $HomeHeaderModelEntityEntityToJson(this);
 
-	@override
-	String toString() {
-		return jsonEncode(this);
-	}
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+
 }

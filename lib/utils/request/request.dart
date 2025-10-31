@@ -10,7 +10,11 @@ import 'package:trip_flutter/utils/request/cookie_interceptor.dart';
 import 'package:trip_flutter/utils/request/request_interceptor.dart';
 import 'package:trip_flutter/utils/request/resp_interceptor.dart';
 import 'package:flutter/services.dart';
-import 'base_model_entity.dart';
+
+import '../../models/base_model_entity.dart';
+
+// 定义转换器回调
+typedef TransformerCallback<T> = BaseModelEntity<T> Function(Map<String, dynamic> input);
 
 class Request {
   static String _baseUrl = "";
@@ -27,6 +31,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) {
     return _request<T>(
       url,
@@ -36,6 +41,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
+      onTypeTransformerCb: onTypeTransformerCb,
     );
   }
 
@@ -47,6 +53,7 @@ class Request {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) {
     return _request<T>(
       url,
@@ -57,6 +64,7 @@ class Request {
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
+      onTypeTransformerCb: onTypeTransformerCb,
     );
   }
 
@@ -67,6 +75,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) {
     return _request<T>(
       url,
@@ -76,6 +85,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
+      onTypeTransformerCb: onTypeTransformerCb,
     );
   }
 
@@ -85,6 +95,7 @@ class Request {
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) {
     return _request<T>(
       url,
@@ -93,6 +104,7 @@ class Request {
       queryParameters: queryParameters,
       options: options,
       cancelToken: cancelToken,
+      onTypeTransformerCb: onTypeTransformerCb,
     );
   }
 
@@ -105,6 +117,7 @@ class Request {
     Options? options,
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) {
     return _request<T>(
       url,
@@ -116,6 +129,7 @@ class Request {
       options: options,
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
+      onTypeTransformerCb: onTypeTransformerCb,
     );
   }
 
@@ -130,6 +144,7 @@ class Request {
     CancelToken? cancelToken,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    TransformerCallback<T>? onTypeTransformerCb,
   }) async {
     Dio dio = Dio();
     dio.options = BaseOptions(
@@ -182,9 +197,9 @@ class Request {
         data: data,
         queryParameters: queryParameters,
         options: (options ?? Options()).copyWith(
-            responseType: options?.responseType ?? ResponseType.bytes,
-            // followRedirects: false,
-            method: options?.method ?? method,
+          responseType: options?.responseType ?? ResponseType.bytes,
+          // followRedirects: false,
+          method: options?.method ?? method,
         ),
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
@@ -202,23 +217,30 @@ class Request {
     }
 
     var model = BaseModelEntity<T>();
-    if(url.startsWith("http")){
-      if(![ResponseType.json, ResponseType.plain].contains(response.requestOptions.responseType)) {
+    if (url.startsWith("http")) {
+      if (![
+        ResponseType.json,
+        ResponseType.plain,
+      ].contains(response.requestOptions.responseType)) {
         return model;
       }
     }
 
-    final typeString = T.toString();
-    final isBasicType = T == String || T == int || T == double || T == bool || T == Uint8List;
-    final isListType = T == List || typeString.startsWith('List<');
+    Map<String, dynamic> jsonData = json.decode(response.data);
 
-    if(isBasicType || isListType) {
-      model.data = _convertResponseData<T>(response.data);
-    } else {
-      model = BaseModelEntity<T>.fromJson(response.data);
+    if (onTypeTransformerCb != null) {
+      return onTypeTransformerCb(jsonData);
     }
 
-    return model;
+    final isBasicType = T == String || T == int || T == double || T == bool || T == Uint8List;
+    final isBaseListType = _isBaseTypeList(jsonData['data']);
+    if(isBasicType) {
+      model.data = jsonData['data'];
+      return model;
+    } else {
+      return BaseModelEntity<T>.fromJson(jsonData);
+    }
+
   }
 
   static void initAdapter(Dio dio) {
@@ -228,7 +250,7 @@ class Request {
     var withTrustedRoots = true;
     // 受信任的证书列表。
     List<ByteData> trustedCertificates = const [];
-    (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = (){
+    (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
       final client = HttpClient();
       client.findProxy = (url) {
         return "PROXY 192.168.0.102:8888";
@@ -238,62 +260,35 @@ class Request {
         return allowBadCert;
       };
       // 如果允许不良证书，直接返回创建的客户端。
-      if(allowBadCert){
+      if (allowBadCert) {
         return client;
       }
       // 否则，创建一个  SecurityContext ，并设置受信任的证书。
-      SecurityContext securityContext =
-      SecurityContext(withTrustedRoots: withTrustedRoots);
+      SecurityContext securityContext = SecurityContext(
+        withTrustedRoots: withTrustedRoots,
+      );
       for (var certificateBytes in trustedCertificates) {
-        securityContext
-            .setTrustedCertificatesBytes(certificateBytes.buffer.asUint8List());
+        securityContext.setTrustedCertificatesBytes(
+          certificateBytes.buffer.asUint8List(),
+        );
       }
       io.HttpClient httpClient = io.HttpClient(context: securityContext);
       return httpClient;
     };
   }
 
-  static dynamic _convertResponseData<T>(dynamic responseData) {
-    final typeString = T.toString();
+  static bool _isBaseTypeList<T>(dynamic data){
 
-    // 首先解析完整的响应 JSON
-    dynamic parsedData;
-    if (responseData is String) {
-      try {
-        parsedData = json.decode(responseData);
-      } catch (e) {
-        print('JSON decode error: $e');
-        return responseData;
-      }
-    } else {
-      parsedData = responseData;
-    }
+    // 快速检查：如果不是列表类型，直接返回 false
+    if (data is! List) return false;
 
-    // 检查是否是 BaseModelEntity 结构
-    if (parsedData is Map<String, dynamic>) {
-      // 提取 data 字段
-      final responseDataField = parsedData['data'];
+    // 使用更高效的类型检查替代字符串解析
+    final firstElement = data.isNotEmpty ? data.first : null;
 
-      if (typeString.startsWith('List<')) {
-        if (responseDataField is List) {
-          // 提取泛型类型
-          final genericType = typeString.substring(5, typeString.length - 1);
-          if (genericType == 'String') {
-            return responseDataField.cast<String>();
-          } else if (genericType == 'int') {
-            return responseDataField.cast<int>();
-          } else if (genericType == 'double') {
-            return responseDataField.cast<double>();
-          } else if (genericType == 'bool') {
-            return responseDataField.cast<bool>();
-          }
-        }
-      }
-
-      // 如果不是列表类型，返回整个 data 字段
-      return responseDataField;
-    }
-
-    return responseData;
+    return firstElement is String ||
+        firstElement is int ||
+        firstElement is double ||
+        firstElement is bool;
   }
+
 }

@@ -1,7 +1,7 @@
-import 'package:trip_flutter/generated/json/base/json_field.dart';
-import 'package:trip_flutter/generated/json/home_mainMenus_model_entity_entity.g.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
-export 'package:trip_flutter/generated/json/home_mainMenus_model_entity_entity.g.dart';
+
+part 'home_mainMenus_model_entity_entity.g.dart';
 
 @JsonSerializable()
 class HomeMainMenusModelEntityEntity {
@@ -11,9 +11,9 @@ class HomeMainMenusModelEntityEntity {
 
 	HomeMainMenusModelEntityEntity();
 
-	factory HomeMainMenusModelEntityEntity.fromJson(Map<String, dynamic> json) => $HomeMainMenusModelEntityEntityFromJson(json);
+	factory HomeMainMenusModelEntityEntity.fromJson(Map<String, dynamic> json) => _$HomeMainMenusModelEntityEntityFromJson(json);
 
-	Map<String, dynamic> toJson() => $HomeMainMenusModelEntityEntityToJson(this);
+	Map<String, dynamic> toJson() => _$HomeMainMenusModelEntityEntityToJson(this);
 
 	@override
 	String toString() {
@@ -30,9 +30,9 @@ class HomeMainMenusModelEntityMainMenu {
 
 	HomeMainMenusModelEntityMainMenu();
 
-	factory HomeMainMenusModelEntityMainMenu.fromJson(Map<String, dynamic> json) => $HomeMainMenusModelEntityMainMenuFromJson(json);
+	factory HomeMainMenusModelEntityMainMenu.fromJson(Map<String, dynamic> json) => _$HomeMainMenusModelEntityMainMenuFromJson(json);
 
-	Map<String, dynamic> toJson() => $HomeMainMenusModelEntityMainMenuToJson(this);
+	Map<String, dynamic> toJson() => _$HomeMainMenusModelEntityMainMenuToJson(this);
 
 	@override
 	String toString() {
@@ -48,12 +48,13 @@ class HomeMainMenusModelEntitySubMenus {
 
 	HomeMainMenusModelEntitySubMenus();
 
-	factory HomeMainMenusModelEntitySubMenus.fromJson(Map<String, dynamic> json) => $HomeMainMenusModelEntitySubMenusFromJson(json);
+	factory HomeMainMenusModelEntitySubMenus.fromJson(Map<String, dynamic> json) => _$HomeMainMenusModelEntitySubMenusFromJson(json);
 
-	Map<String, dynamic> toJson() => $HomeMainMenusModelEntitySubMenusToJson(this);
+	Map<String, dynamic> toJson() => _$HomeMainMenusModelEntitySubMenusToJson(this);
 
 	@override
 	String toString() {
 		return jsonEncode(this);
 	}
 }
+

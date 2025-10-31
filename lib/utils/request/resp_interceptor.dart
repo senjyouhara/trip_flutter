@@ -2,7 +2,8 @@
 import 'package:dio/dio.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'base_model_entity.dart';
+import '../../models/base_model_entity.dart';
+
 
 class MyResponseInterceptor extends  Interceptor {
 

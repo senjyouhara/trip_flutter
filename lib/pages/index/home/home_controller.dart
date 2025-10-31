@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 
+import '../../../models/base_model_entity.dart';
 import '../../../models/home_mainMenus_model_entity_entity.dart';
 import '../../../utils/request/request.dart';
 
@@ -15,12 +16,16 @@ class HomeController extends GetxController {
   }
 
   Future<void> getBannerData() async {
-    var result = await Request.get<List<String>>('/api/home/banner');
+    var result = await Request.get<List<String>>('/api/home/banner', onTypeTransformerCb: (jsonMap){
+      return BaseModelEntity<List<String>>.fromJson(jsonMap);
+    });
     bannerList.value = result.data ?? [];
   }
 
   Future<void> getMainMenusData() async {
-    var result = await Request.get<List<HomeMainMenusModelEntityEntity>>('/api/home/mainMenus');
+    var result = await Request.get<List<HomeMainMenusModelEntityEntity>>('/api/home/mainMenus', onTypeTransformerCb: (jsonMap){
+      return BaseModelEntity<List<HomeMainMenusModelEntityEntity>>.fromJson(jsonMap);
+    });
     mainMenuList.value = result.data ?? [];
   }
 

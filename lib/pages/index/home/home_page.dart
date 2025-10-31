@@ -50,13 +50,15 @@ class HomePage extends GetView<HomeController> {
     ),
   );
 
-  get _listView => ListView(
-    children: [
-      _swiper,
-      const SizedBox(height: 800, child: ListTile(title: Text("hehehehehe"))),
-      Obx(()=> MainMenus(mainMenus: controller.mainMenuList)),
-    ],
-  );
+  Widget getListView(){
+    return ListView(
+      children: [
+        _swiper,
+        const SizedBox(height: 800, child: ListTile(title: Text("hehehehehe"))),
+        // Obx(()=> MainMenus(mainMenus: controller.mainMenuList.value)),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class HomePage extends GetView<HomeController> {
               }
               return false;
             },
-            child: _listView,
+            child: getListView(),
           ),
           _appbar,
         ],
